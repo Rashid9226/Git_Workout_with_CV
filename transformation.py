@@ -30,10 +30,11 @@ Translation: The entire image moves to the right and down.
 
 def show(img,title,p):
     img_rgb = img[:, :, ::-1]
-    ax = plt.subplot(2,2, p)
+    ax = plt.subplot(2,3, p)
     plt.title(title)
     plt.imshow(img_rgb)
     plt.axis()
+    # plt.subplots_adjust(bottom=-0.2,wspace=0.6)
 
 img=cv2.imread("ace.png")
 
@@ -59,9 +60,17 @@ M = cv2.getAffineTransform(pts_1,pts_2)
 # print(M)
 aff_img =cv2.warpAffine(img,M,(width,height))
 
+
+"""Perspective Transformation"""
+pts_1= np.float32([[0,0],[60,65],[45,160],[500,200]])
+pts_2= np.float32([[10,10],[60,65],[45,160],[500,200]])
+Mp=cv2.getPerspectiveTransform(pts_1,pts_2)
+pp_image = cv2.warpPerspective(img,Mp,(width,height))
+
 show(img,"Original",1)
 show(dst_img1,'titled image',2)
 show(dst_img2,'Stretched Image',3)
 show(aff_img,'Affine Image',4)
+show(pp_image,"perspective Transformation",5)
 
 plt.show()
